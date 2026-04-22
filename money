@@ -1,0 +1,87 @@
+balance = 10000
+PIN = "1234"
+
+def check_pin(user_pin):
+    return user_pin == PIN
+
+def get_balance():
+    return balance
+
+def deposit(amount):
+    global balance
+    balance += amount
+    return balance
+
+def withdraw(amount):
+    global balance
+    if amount > balance:
+        return False
+    balance -= amount
+    return True
+    
+from datetime import datetime
+
+transactions = []
+
+def add_transaction(type, amount):
+    time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    transactions.append(f"{type} of ₹{amount} on {time}")
+
+def show_transactions():
+    if not transactions:
+        print("No transactions yet.")
+    else:
+        for t in transactions:
+            print(t)
+            
+
+
+def is_valid_amount(amount):
+    return amount > 0
+
+print("----- Welcome to ATM -----")
+
+user_pin = input("Enter PIN: ")
+if not check_pin(user_pin):
+    print("Invalid PIN")
+    exit()
+
+while True:
+    print("\n1. Check Balance")
+    print("2. Deposit")
+    print("3. Withdraw")
+    print("4. Statement")
+    print("5. Exit")
+
+    choice = input("Enter choice: ")
+
+    if choice == "1":
+        print("Balance: ₹", get_balance())
+
+    elif choice == "2":
+        amount = int(input("Enter amount: "))
+        if is_valid_amount(amount):
+            deposit(amount)
+            add_transaction("Deposit", amount)
+            print("Deposited successfully")
+        else:
+            print("Invalid amount")
+
+    elif choice == "3":
+        amount = int(input("Enter amount: "))
+        if withdraw(amount):
+            add_transaction("Withdraw", amount)
+            print("Withdrawn successfully")
+        else:
+            print("Insufficient balance")
+
+    elif choice == "4":
+        show_transactions()
+
+    elif choice == "5":
+        print("Thank you!")
+        break
+
+    else:
+        print("Invalid choice")           
+            
